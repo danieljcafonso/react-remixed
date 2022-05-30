@@ -19,13 +19,15 @@ export async function createHero({
   name,
   secretIdentity,
   userId,
-}: Pick<Hero, "name" | "secretIdentity"> & {
+  weakness
+}: Pick<Hero, "name" | "secretIdentity" | "weakness"> & {
   userId: User["id"];
 }) {
   return prisma.hero.create({
     data: {
       name,
       secretIdentity,
+      weakness,
       user: {
         connect: {
           id: userId,
@@ -38,6 +40,16 @@ export async function createHero({
 export function getHeroes({ userId }: { userId: User["id"] }) {
   return prisma.hero.findMany({
     where: { userId },
-    select: { id: true, name: true, secretIdentity: true },
+    select: { id: true, name: true, secretIdentity: true, weakness: true},
+  });
+}
+
+
+export function deleteHero({
+  id,
+  userId,
+}: Pick<Hero, "id"> & { userId: User["id"] }) {
+  return prisma.hero.deleteMany({
+    where: { id, userId },
   });
 }
