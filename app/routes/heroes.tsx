@@ -1,73 +1,26 @@
-import type { LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import Header from "~/components/Header";
+import HeroesNavList from "~/components/HeroesNavList";
 
-import { requireUserId } from "~/session.server";
-import { useUser } from "~/utils";
-import { getHeroes } from "~/models/hero.server";
-
-type LoaderData = {
-  heroes: Awaited<ReturnType<typeof getHeroes>>;
-};
-
-export const loader: LoaderFunction = async ({ request }) => {
-  const userId = await requireUserId(request);
-  const heroes = await getHeroes({ userId });
-
-  return json<LoaderData>({ heroes });
-};
-
+// TODO: we need to type our data somehow
 export default function HeroesPage() {
-  const data = useLoaderData() as LoaderData;
-  const user = useUser();
+  // TODO: Where is the data?
 
   return (
     <div className="flex h-full min-h-screen flex-col">
-      <header className="flex items-center justify-between bg-slate-800 p-4 text-white">
-        <h1 className="text-3xl font-bold">
-          <Link to=".">Heroes</Link>
-        </h1>
-        <p>{user.email}</p>
-        <Form action="/logout" method="post">
-          <button
-            type="submit"
-            className="rounded bg-slate-600 py-2 px-4 text-blue-100 hover:bg-blue-500 active:bg-blue-600"
-          >
-            Logout
-          </button>
-        </Form>
-      </header>
+      <Header />
 
       <main className="flex h-full bg-white">
         <div className="h-full w-80 border-r bg-gray-50">
-          <Link to="new" className="block p-4 text-xl text-blue-500">
-            + Add Hero
-          </Link>
+          {/* TODO: somehow we need to add a new hero */}
+          <div className="block p-4 text-xl text-blue-500">+ Add Hero</div>
 
           <hr />
-
-          {data.heroes.length === 0 ? (
-            <p className="p-4">No heroes exist yet</p>
-          ) : (
-            <ol>
-              {data.heroes.map((hero) => (
-                <li key={hero.id}>
-                  <NavLink
-                    className={({ isActive }) =>
-                      `block border-b p-4 text-xl ${isActive ? "bg-white" : ""}`
-                    }
-                    to={hero.id}
-                  >
-                    📝 {hero.name}
-                  </NavLink>
-                </li>
-              ))}
-            </ol>
-          )}
+          {/* TODO: When we have data we need to render it, right? */}
+          <HeroesNavList heroes={[]} />
         </div>
 
         <div className="flex-1 p-6">
-          <Outlet />
+          {/* TODO: We need to render our nested routes somehow 🤔 */}
         </div>
       </main>
     </div>
