@@ -1,8 +1,10 @@
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, useCatch, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
-import { deleteHero, Hero } from "~/models/hero.server";
+import type { Hero } from "~/models/hero.server";
+import { deleteHero } from "~/models/hero.server";
 import { getHeroById } from "~/models/hero.server";
 import { requireUserId } from "~/session.server";
 
@@ -18,8 +20,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   await deleteHero({ userId, id: params.heroId });
 
   return redirect("/heroes");
-
-}
+};
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const userId = await requireUserId(request);
@@ -68,4 +69,3 @@ export function CatchBoundary() {
 
   throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }
-
